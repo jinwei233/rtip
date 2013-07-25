@@ -1,0 +1,56 @@
+.ks-chart-tip{
+	
+}
+.ks-chart-tip-content{
+	padding:0 8px;
+	color:#333;
+	font-size:12px;
+	background-color:#FFEFE0;
+	border:1px solid #FFBD7C;
+	text-align:center;
+	display:inline-block;
+	height:100%;
+}
+/* 尖角 */
+.ks-chart-arrow-t,.ks-chart-arrow-b{
+	position:absolute;
+	background-repeat:no-repeat;
+	line-height:0;
+	font-size:0;
+}
+/* 尖角朝下 */
+.ks-chart-arrow-b{
+	width:8px;height:5px;bottom:-4px;
+	background-image:url(a.png);
+}
+/* 尖角朝上 */
+.ks-chart-arrow-t{
+	width:8px;height:5px;top:-4px;
+	background-image:url(b.png);
+}
+
+/* 主题一 */
+.ks-chart-tip-blues{}
+.ks-chart-tip-blues .ks-chart-tip-content{
+	padding:0 8px;
+	color:#333;
+	font-size:12px;
+	background-color:#cee5fc;
+	border:1px solid #b9d9f1;
+	text-align:center;
+	display:inline-block;
+	height:100%;
+}
+.ks-chart-tip-blues .ks-chart-arrow-b{
+	line-height:0;
+	font-size:0;
+}
+/* 尖角朝下 */
+.ks-chart-tip-blues .ks-chart-arrow-b{
+	width:8px;height:5px;bottom:-4px;
+	background-image:url(c.png);
+}
+
+/********************custom************************/
+.custom-tip{padding:0 20px;}
+/********************custom end********************/
