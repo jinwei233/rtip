@@ -88,6 +88,21 @@ KISSY.add("mui/tip",function(S,Anim,XTemplate){
         return $tip;
       }
     },
+    getBBoxOf:function($el){
+      if($el){
+        var offset = $el.offset()
+          , width = $el.width()
+          , height = $el.height()
+        return {
+          left:offset.left,
+          top:offset.top,
+          width:$el.width(),
+          height:$el.height()
+        }
+      }else{
+        return false;
+      }
+    },
     getarrow:function($con){
       $con || ($con = this.gettip(this.getdata()));
       return $con.one(".mui-poptip-arrow");
@@ -110,10 +125,6 @@ KISSY.add("mui/tip",function(S,Anim,XTemplate){
         , w
 
       data = this.getdata()
-      if(!data.dir){
-
-      }
-
       $tip = this.gettip(data)
       $arrow = this.getarrow($tip)
       align = this.get("align")
@@ -135,7 +146,8 @@ KISSY.add("mui/tip",function(S,Anim,XTemplate){
       if(pos){
         $tip.css(pos.style);
         $arrow.css(pos.astyle);
-      }
+      };
+      this.set("$tip",$tip);
     },
     _compute:function($tip){
       var align = this.get("align")
@@ -182,7 +194,6 @@ KISSY.add("mui/tip",function(S,Anim,XTemplate){
         }
         return false;
       }
-
       function bottom(){
         var dis_x = $offset.left + (w - tip_width)/2 + offset[0]
           , dis_y = $offset.top  - tip_height + offset[1]
@@ -243,6 +254,32 @@ KISSY.add("mui/tip",function(S,Anim,XTemplate){
       var fn = dir[align.dir] || auto();
       pos = fn();
       return pos;
+    },
+    //获取箭头的位置
+    _getarrowxy:function($tip,x,y,bbox){
+
+    },
+    move:function(x,y){
+      var that = this
+        , $tip = this.get("$tip")
+      if($tip){
+        var bbox = this.getBBoxOf($tip)
+        var tip_x = bbox.left
+          , tip_y = bbox.top
+          , arrow_x
+
+        var ft = new Ft({duration:200});
+        currentFtInstance = ft;
+        ft.on('step',function(e){
+          var s = e.s;
+          D.css(that.$node,'left',left_from+(s*d1)+'px');
+          D.css(that.$node,'top',top_from+(s*d2)+'px');
+          D.css(that.arrowNode,'left',a_left_from+(s*d3)+'px');
+        },this);
+        ft.run();
+      }else{
+        this.initTip(x,y,content);
+      }
     },
     show:function(){
 
