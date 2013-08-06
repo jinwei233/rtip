@@ -486,13 +486,18 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
           });
         })
       }else{
-        $tip.css({
-          position:"absolute",
-          width:tip.bbox.width+"px",
-          height:tip.bbox.height+"px",
-          left:info.tx+"px",
-          top:info.ty+"px"
-        });
+        var tipcss = {
+            position:"absolute",
+            left:info.tx+"px",
+            top:info.ty+"px"
+          }
+        // if(!titleMode){
+          tipcss = S.merge(tipcss,{
+            width:tip.bbox.width+"px",
+            height:tip.bbox.height+"px"
+          });
+        // }
+        $tip.css(tipcss);
         $arrow.css({
           left:info.ax+"px",
           top:info.ay+"px",
@@ -587,7 +592,6 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
         , maxheight = this.get("maxheight")
 
       size = this.getsizeof({content:content},minwidth,minheight,maxwidth,maxheight);
-
       if(minwidth && minwidth>size.width){
         width = minwidth;
       }else if(maxwidth && maxwidth < size.width){
@@ -603,7 +607,6 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
       }else{
         height = size.height;
       }
-
       tip = {
         bbox:{
           width:width,
@@ -696,4 +699,7 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
     }
   }
   return Tip;
-},{requires:['./anim',"./index.css","xtemplate","promise"]});
+},{requires:['./anim',
+             // "./index.css",
+             "xtemplate",
+             "promise"]});
