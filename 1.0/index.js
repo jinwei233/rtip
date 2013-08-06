@@ -17,7 +17,8 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
     share:false,                           // 共用tip
     autoAdjust:false,                      // 窗口变化自动调整位置
     autoRender:false,                      // 自动渲染，必须设置了x,y
-    autoAlignRate:300
+    autoAlignRate:300,
+    offset:[0,0]
   };
 
     var TIPTPL = '<div class="mui-poptip mui-poptip-{{theme}}">\
@@ -34,9 +35,9 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
                     </div>\
                 </div>';
   // default align
-  var align = {
-    offset:[0,0]
-  };
+  // var align = {
+  //   offset:[0,0]
+  // };
   var $shareTip
     , xtemplate
     , themecfg = {
@@ -45,7 +46,6 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
 
   function createTip(data){
     data = S.merge(themecfg,data);
-    // var HTML = S.substitute(TIPTPL,data);
     if(!xtemplate){
       xtemplate = new XTemplate(TIPTPL)
     }
@@ -236,6 +236,8 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
 
       if(ty + tbbox.height > cbbox.top + cbbox.height){//超过下边界了，会出现滚动条，要避免
         ty = cbbox.top + cbbox.height - tbbox.height;
+      }else if(ty<cbbox.top){//越过上边界了
+        ty = cbbox.top;
       }
 
       ret.tx = tx + offset[0];
@@ -317,8 +319,12 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
     },
     _autoAlign:function(config){
       config || (config = {});
+      var titleMode = this.get("__mode__") == "title";
+
       if(this._hide == true){
-        return;
+        if(!titleMode){
+          return;
+        }
       }
       if(this.isRunning()){
         return;
@@ -373,8 +379,8 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
                                      offset);
       //各个方向上的位移修正
       info = fixinfo(info,dir);
-      //位置信息没有变化的话，不重新渲染
-      if(this._previnfo && S.equals(info,this._previnfo)){
+      //title模式，并且位置信息没有变化的话，不重新渲染
+      if(!titleMode && this._previnfo && S.equals(info,this._previnfo)){
         return;
       }
       this._previnfo = info;
@@ -396,7 +402,7 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
 
       $tip.appendTo($body);
 
-      if(tip0){
+      if(tip0 && !titleMode){
         $tip.css({
           position:"absolute"
         });
@@ -656,5 +662,38 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
       this._hide = true;
     }
   });
+  var listenDft = {
+    maxwidth:300,
+    "__mode__":"title"
+  };
+  Tip.listen = function(selector,opt){
+    opt || (opt = {});
+    var els = S.all(selector);
+    var BINDED = "binded";
+
+    if(els){
+      var tip = new Tip(S.merge(listenDft,opt.alignConfig));
+      els = S.filter(els,function(el){
+              return D.data(el,BINDED) != BINDED;
+            });
+      S.each(els,function(el){
+        D.data(el,BINDED,BINDED);
+        E.on(el,"mouseenter",function(e){
+          e.preventDefault();
+          var attrname = opt.attrname || "data-title"
+          var el = e.currentTarget
+            , title = D.attr(el,attrname)
+          if(S.trim(title)){
+            tip.set("content",title);
+            tip.set("align",el);
+            tip.autoAlign();
+          }
+        })
+        E.on(el,"mouseleave",function(){
+          tip.hide();
+        })
+      });
+    }
+  }
   return Tip;
-},{requires:['./anim',"xtemplate","promise"]});
+},{requires:['./anim',"./index.css","xtemplate","promise"]});
