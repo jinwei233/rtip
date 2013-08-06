@@ -1,68 +1,55 @@
-KISSY.use("mui/tip",function(S,Tip){
+KISSY.use("gallery/rtip/1.0/index,event,dom",function(S,Tip,E,D){
   //尖角朝下
   var tip = new Tip({
-    align:{
-      node:"#J_Tip_Bottom",
-      dir:"b", //r b l,
-      offset:[0,-5]
-    },
+    align:"#J_Target1",
+    dirs:["top"],
+    offset:[0,0],
     content:"hello world",
     theme:"white",//yellow
+    // limit:window,
     maxwidth:200
   });
 
-  tip.align();
+  tip.autoAlign();
 
-  //尖角朝左
-  var tip2 = new Tip({
-    align:{
-      node:"#J_Tip_Left",
-      dir:"l", //r b l,
-      offset:[10,0]
-    },
-    content:"hello world",
-    theme:"white",//yellow
-    maxwidth:200
+  var pos2 = function(){
+    tip.set("align","#J_Target2");
+    tip.set("content","所谓分仓计划，就是说");
+    tip.autoAlign();
+    setTimeout(pos3,4000);
+  }
+
+  function pos3(){
+    tip.set("align","#J_Target3");
+    tip.set("content","所谓分仓计划，就是说能帮助商家blah");
+    tip.autoAlign();
+    setTimeout(pos4,4000);
+  }
+
+  function pos4(){
+    tip.set("align","#J_Target4");
+    tip.set("content","所谓分仓计划，就是说能帮助商家blah，更长更长更长更长更长更长");
+    tip.autoAlign();
+    setTimeout(pos5,4000);
+  }
+
+
+  function pos5(){
+    tip.set("align","#J_Target5");
+    tip.set("content","所谓分仓计划，就是说能帮助商家blah，更长更长更长更长更长更长更长更长更长更长更长更长更长更长更长更长更长更长");
+    tip.autoAlign();
+  }
+
+
+  function pos6(){
+    tip.moveto(300,300);
+  }
+
+  setTimeout(pos2,2000);
+
+  E.on(window,"resize",function(){
+    tip.autoAlign();
+    // tip.moveto(400,400);
   });
-
-  tip2.align();
-
-  //尖角朝上
-  var tip3 = new Tip({
-    align:{
-      node:"#J_Tip_Top",
-      dir:"t", //r b l,
-      offset:[0,5]
-    },
-    content:"hello world",
-    theme:"white",//yellow
-    maxwidth:200
-  });
-
-  tip3.align();
-
-
-  var tip4 = new Tip({
-    align:{
-      node:"#J_Tip_Right",
-      dir:"r", //r b l,
-      offset:[-5,0]
-    },
-    content:"hello world",
-    theme:"white",//yellow
-    maxwidth:200
-  });
-  tip4.align();
-
-  //自动探测能放下tip的位置
-  var tip5 = new Tip({
-    align:{
-      node:"#J_Tip_Auto"
-    },
-    content:"hello world",
-    theme:"white",//yellow
-    maxwidth:200
-  });
-  tip5.align();
 
 })

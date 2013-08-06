@@ -2,7 +2,7 @@
 /**
  * @author yuanhuang.tjw@taobao.com
  * */
-KISSY.add('tip/anim',function(S,Anim){
+KISSY.add('gallery/rtip/1.0/anim',function(S,Anim){
   var Easing = Anim.Easing
     , requestAnimFrame = window.requestAnimationFrame       ||
                          window.webkitRequestAnimationFrame ||
@@ -77,6 +77,7 @@ KISSY.add('tip/anim',function(S,Anim){
         if(opts.endframe){
           opts.endframe.call(api,toProps,1);
         }
+        api.fire("complete");
       }
       now = +new Date;
       a = now - begin - b;
@@ -93,6 +94,7 @@ KISSY.add('tip/anim',function(S,Anim){
       resumeable = false;
     }
     var api =  {
+      run:run,
       stop:function(){
         cancelAnimationFrame(timer);
       },
@@ -112,7 +114,10 @@ KISSY.add('tip/anim',function(S,Anim){
         return !ended;
       }
     }
-    run();
+    S.mix(api,S.EventTarget);
+    if(opts.autoRun != false){
+      api.run();
+    }
     return api;
   }
   Animate.AnimateObject = function (props,cfg){
@@ -136,6 +141,7 @@ KISSY.add('tip/anim',function(S,Anim){
     var anim = Animate(from,to,{
       easing:cfg.easing,
       duration:cfg.duration,
+      autoRun:cfg.autoRun,
       frame:function(props,t){
         for(var x in props){
           var map = AnimMap
