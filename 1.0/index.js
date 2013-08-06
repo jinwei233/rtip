@@ -700,6 +700,6 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
   }
   return Tip;
 },{requires:['./anim',
-             // "./index.css",
+             "./index.css",
              "xtemplate",
              "promise"]});
