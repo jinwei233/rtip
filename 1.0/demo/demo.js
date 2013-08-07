@@ -2,7 +2,7 @@ KISSY.use("gallery/rtip/1.0/index,event,dom",function(S,Tip,E,D){
   //尖角朝下
   var tip = new Tip({
     align:"#J_Target1",
-    dirs:["top"],
+    dirs:["top"],//如果top能放下，就不再寻找其它位置了
     offset:[0,0],
     content:"hello world",
     theme:"white",//yellow
