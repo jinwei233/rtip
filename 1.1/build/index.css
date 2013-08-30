@@ -2,7 +2,7 @@
 
 .mui-poptip {
     color: #DB7C22;
-    z-index: 101;
+    z-index: 1001;
     font-size: 12px;
     line-height: 1.5;
     zoom: 1;
@@ -23,7 +23,7 @@
     background-color: #FFFCEF;
     border: 1px solid #ffbb76;
     /*border-radius: 2px;*/
-    padding: 15px;
+    padding:5px;
     zoom: 1;
 		z-index:20;
     _display: inline;

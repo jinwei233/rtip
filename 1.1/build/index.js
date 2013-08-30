@@ -1,15 +1,15 @@
 /*
 combined files : 
 
-gallery/rtip/1.0/anim
-gallery/rtip/1.0/index
+gallery/rtip/1.1/anim
+gallery/rtip/1.1/index
 
 */
 // -*- coding: utf-8; -*-
 /**
  * @author yuanhuang.tjw@taobao.com
  * */
-KISSY.add('gallery/rtip/1.0/anim',function(S,Anim){
+KISSY.add('gallery/rtip/1.1/anim',function(S,Anim){
   var Easing = Anim.Easing
     , requestAnimFrame = window.requestAnimationFrame       ||
                          window.webkitRequestAnimationFrame ||
@@ -181,7 +181,7 @@ KISSY.add('gallery/rtip/1.0/anim',function(S,Anim){
 /**
  * @author:元晃
  * */
-KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
+KISSY.add('gallery/rtip/1.1/index',function(S,Anim,XTemplate,Promise){
   var D = S.DOM
     , E = S.Event
     , win = window
@@ -246,7 +246,10 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
       $detector.css("width",maxwidth);
     }else if(ret.width < minwidth){
       $detector.css("width",minwidth);
+    } else {
+      $detector.css("width", 'auto');
     }
+
     if(ret.height < minheight){
       $detector.css("height",minheight);
     }else if(ret.height > maxheight){
@@ -271,7 +274,7 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
     var edge;
     switch(dir){
       case "top":
-      edge = cbbox.top - tbbox.top - bbox.height;
+      edge = tbbox.top - bbox.height;
       break;
       case "right":
       edge =  cbbox.width - tbbox.left - tbbox.width - bbox.width;
@@ -386,6 +389,10 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
 
       ret.ty = ty;
       ret.ay = ay;
+
+      ret.tx = tx - offset[0];
+      ret.ty = ty - offset[1];
+
       break;
       case "right":
       case "left":
@@ -550,7 +557,7 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
       var dir = chooseProperDirection(target,
                                       constrain,
                                       tip,
-                                      this.get("dir"));
+                                      this.get("dirs"));
       var info = getTipBoxAndArrowXY(dir,
                                      target,
                                      this.get("arrow"),
@@ -571,8 +578,12 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
           "left":"r"
       }
 
-      var $tip = this.get$tip({content:this.get("content"),dir:dir})
-        , $arrow = this.get$arrow($tip)
+      var $tip = this.get$tip({
+        content: this.get("content"),
+        dir: dir,
+        theme: this.get('theme')
+      });
+      var $arrow = this.get$arrow($tip)
 
       var clsname = $arrow.attr("class")
       clsname = clsname.replace(/mui-poptip-arrow-\w/g,"");
@@ -666,13 +677,18 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
           });
         })
       }else{
-        $tip.css({
-          position:"absolute",
-          width:tip.bbox.width+"px",
-          height:tip.bbox.height+"px",
-          left:info.tx+"px",
-          top:info.ty+"px"
-        });
+        var tipcss = {
+            position:"absolute",
+            left:info.tx+"px",
+            top:info.ty+"px"
+          }
+        // if(!titleMode){
+          tipcss = S.merge(tipcss,{
+            width:tip.bbox.width+"px",
+            height:tip.bbox.height+"px"
+          });
+        // }
+        $tip.css(tipcss);
         $arrow.css({
           left:info.ax+"px",
           top:info.ay+"px",
@@ -767,7 +783,6 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
         , maxheight = this.get("maxheight")
 
       size = this.getsizeof({content:content},minwidth,minheight,maxwidth,maxheight);
-
       if(minwidth && minwidth>size.width){
         width = minwidth;
       }else if(maxwidth && maxwidth < size.width){
@@ -783,7 +798,6 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
       }else{
         height = size.height;
       }
-
       tip = {
         bbox:{
           width:width,
@@ -876,5 +890,8 @@ KISSY.add("gallery/rtip/1.0/index",function(S,Anim,XTemplate,Promise){
     }
   }
   return Tip;
-},{requires:['./anim',"./index.css","xtemplate","promise"]});
+},{requires:['./anim',
+             "./index.css",
+             "xtemplate",
+             "promise"]});
 
